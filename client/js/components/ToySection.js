@@ -11,7 +11,8 @@ var ToySection = React.createClass({
     this.setState({ displayedText: text });
   },
   componentDidMount: function(){
-    ToySectionStore.init(this.props.path)
+    console.log('componentDidMount');
+    ToySectionActionCreator.registerPath(this.props.path);
     ToySectionStore.on('change', this.updateFromStore);
   },
   componentWillUnmount: function(){

@@ -19,5 +19,11 @@ module.exports = {
       type: ActionTypes.REFRESH_TEXT,
       path: path
     });
+  },
+  registerPath: function(path){
+    ToyDispatcher.dispatch({
+      type: ActionTypes.REGISTER_PATH,
+      path: path
+    })
   }
 };

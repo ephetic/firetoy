@@ -5,36 +5,34 @@ var ToyDispatcher = require('../dispatcher/ToyDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 
-var fb = require('../utils/firebaseUtils.js').getRefByPath;
+var db = require('../utils/firebaseUtils.js').getRefByPath;
 
 var CHANGE_EVENT = 'change';
 
 var _data = {};
 var ToySectionStore = assign({}, EventEmitter.prototype, {
-
-  // init handles event registry, so would probably be in
-  // either the ActionCreator or ... something.
-  init: function(path){
-    console.log('ToySectionStore init', path);
-    fb(path).on('value', function(snapshot){
-      console.log('fb', path, snapshot.val());
-      _data[path] = snapshot.val();
-      this.emit(CHANGE_EVENT);
-    }, this);
-  },
   get: function(path){ return _data[path] },
   set: function(path, data){
     console.log('set', path, _data[path], '->', data);
-    fb(path).set(data);
+    db(path).set(data);
   }
 });
 
 ToySectionStore.dispatcherToken = ToyDispatcher.register(function(action){
   switch(action.type){
-    case ActionType.CREATE_TEXT:
-      this.set(action.path, action.text);
+    case ActionTypes.CREATE_TEXT:
+      ToySectionStore.set(action.path, action.text);
       break;
-    case ActionType.REFRESH_TEXT:
+    case ActionTypes.REFRESH_TEXT:
+      console.log('ToySectionStore REFRESH_TEXT', action);
+      break;
+    case ActionTypes.REGISTER_PATH:
+      console.log('register', action.path, this);
+      db(action.path).on('value', function(data){
+        _data[action.path] = data.val();
+        console.log(_data);
+        ToySectionStore.emit(CHANGE_EVENT);
+      });
       break;
   }
 });
