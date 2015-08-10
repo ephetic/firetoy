@@ -32,6 +32,7 @@ var ToySectionStore = assign({}, EventEmitter.prototype, {
 ToySectionStore.dispatcherToken = ToyDispatcher.register(function(action){
   switch(action.type){
     case ActionType.CREATE_TEXT:
+      this.set(action.path, action.text);
       break;
     case ActionType.REFRESH_TEXT:
       break;

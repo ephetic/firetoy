@@ -40,7 +40,8 @@ var ToySection = React.createClass({
   },
   submit: function(){
     var text = this.state.internalText;
-    ToySectionStore.set(this.props.path, text);
+    // ToySectionStore.set(this.props.path, text);
+    ToySectionActionCreator.createText(this.props.path, text);
     this.setState({ internalText: '' });
   }
 });
