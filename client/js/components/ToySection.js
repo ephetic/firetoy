@@ -1,8 +1,5 @@
 var React = require('react');
 var ToySectionStore = require('../stores/ToySectionStore');
-var ToyDispatcher = require('../dispatcher/ToyDispatcher');
-
-var ToySectionActionCreator = require('../actions/ToySectionActionCreator');
 
 var ToySection = React.createClass({
   updateFromStore: function(){
@@ -20,7 +17,7 @@ var ToySection = React.createClass({
     })
   },
   getInitialState: function(){
-    var text = ToySectionStore.get();
+    var text = ToySectionStore.get(this.props.path);
     return { internalText: '', displayedText: text }
   },
   render: function() {

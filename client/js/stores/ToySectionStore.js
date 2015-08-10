@@ -1,6 +1,5 @@
 var React = require('react');
 var ActionTypes = require('../constants/ActionTypes');
-var ToyDispatcher = require('../dispatcher/ToyDispatcher');
 
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
@@ -28,16 +27,5 @@ var ToySectionStore = assign({}, EventEmitter.prototype, {
     fb(path).set(data);
   }
 });
-
-ToySectionStore.dispatcherToken = ToyDispatcher.register(function(action){
-  switch(action.type){
-    case ActionType.CREATE_TEXT:
-      break;
-    case ActionType.REFRESH_TEXT:
-      break;
-  }
-});
-
-
 
 module.exports = ToySectionStore;
