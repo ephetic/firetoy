@@ -1,18 +1,17 @@
 var React = require('react');
-var ToySectionStore = require('../stores/ToySectionStore');
-var ToyDispatcher = require('../dispatcher/ToyDispatcher');
-
+var db = require('../utils/firebaseUtils.js');
 var ToySectionActionCreator = require('../actions/ToySectionActionCreator');
+
+var ToySectionStore = require('../stores/ToySectionStore');
 
 var ToySection = React.createClass({
   updateFromStore: function(){
+    console.log('updateFromStore');
     var text = ToySectionStore.get(this.props.path);
-    console.log('updateFromStore', this.props.path, text);
     this.setState({ displayedText: text });
   },
   componentDidMount: function(){
-    console.log('componentDidMount');
-    ToySectionActionCreator.registerPath(this.props.path);
+    db.registerPath(this.props.path);
     ToySectionStore.on('change', this.updateFromStore);
   },
   componentWillUnmount: function(){
@@ -41,7 +40,6 @@ var ToySection = React.createClass({
   },
   submit: function(){
     var text = this.state.internalText;
-    // ToySectionStore.set(this.props.path, text);
     ToySectionActionCreator.createText(this.props.path, text);
     this.setState({ internalText: '' });
   }

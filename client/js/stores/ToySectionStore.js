@@ -1,11 +1,10 @@
 var React = require('react');
+var assign = require('object-assign');
+var db = require('../utils/firebaseUtils.js');
 var ActionTypes = require('../constants/ActionTypes');
 var ToyDispatcher = require('../dispatcher/ToyDispatcher');
 
 var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
-
-var db = require('../utils/firebaseUtils.js').getRefByPath;
 
 var CHANGE_EVENT = 'change';
 
@@ -13,8 +12,10 @@ var _data = {};
 var ToySectionStore = assign({}, EventEmitter.prototype, {
   get: function(path){ return _data[path] },
   set: function(path, data){
-    console.log('set', path, _data[path], '->', data);
-    db(path).set(data);
+    db.set(path,data);
+  },
+  _set: function(path, data){
+    _data[path] = data;
   }
 });
 
@@ -25,14 +26,8 @@ ToySectionStore.dispatcherToken = ToyDispatcher.register(function(action){
       break;
     case ActionTypes.REFRESH_TEXT:
       console.log('ToySectionStore REFRESH_TEXT', action);
-      break;
-    case ActionTypes.REGISTER_PATH:
-      console.log('register', action.path, this);
-      db(action.path).on('value', function(data){
-        _data[action.path] = data.val();
-        console.log(_data);
-        ToySectionStore.emit(CHANGE_EVENT);
-      });
+      ToySectionStore._set(action.path, action.text);
+      ToySectionStore.emit(CHANGE_EVENT);
       break;
   }
 });

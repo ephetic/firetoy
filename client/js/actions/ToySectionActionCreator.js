@@ -2,25 +2,26 @@ var React = require('react');
 var ActionTypes = require('../constants/ActionTypes');
 var ToyDispatcher = require('../dispatcher/ToyDispatcher');
 
-var db = require('../utils/firebaseUtils.js').getRefByPath;
-
-// This file is not yet integrated into the app.
 module.exports = {
-  createText: function(path, text){
+  createText: function(path, text, next){
+    console.log('createText');
     ToyDispatcher.dispatch({
       type: ActionTypes.CREATE_TEXT,
       text: text,
-      path: path
+      path: path,
+      next: next
     });
-    db(path).set(text);
   },
-  refreshText: function(path){
+  refreshText: function(path, text){
+    console.log('refreshText');
     ToyDispatcher.dispatch({
       type: ActionTypes.REFRESH_TEXT,
-      path: path
+      path: path,
+      text: text
     });
   },
   registerPath: function(path){
+    console.log('registerPath');
     ToyDispatcher.dispatch({
       type: ActionTypes.REGISTER_PATH,
       path: path
